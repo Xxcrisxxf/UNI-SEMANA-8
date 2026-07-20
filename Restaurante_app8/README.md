@@ -1,27 +1,25 @@
 Nombre : CRISTIAN JAIR BRAVO CHIMBORAZO
-Descripción del sistema
-Este sistema es una aplicación de consola modular orientada a objetos (POO) diseñada para administrar las operaciones básicas de un restaurante. Permite el registro, almacenamiento en memoria, listado y búsqueda de dos componentes esenciales del negocio: Productos (comidas, bebidas, etc.) y Clientes.
- La estructura de carpetas y archivos se distribuye de la siguiente manera:
+Este sistema es una aplicación de consola modular desarrollada en Python para la gestión interna de un restaurante. Permite administrar de forma eficiente colecciones de productos tradicionales, bebidas específicas y clientes mediante una interfaz interactiva de menús. El diseño pone especial énfasis en el control de duplicados , anotaciones de tipos consistentes y la protección de datos mediante encapsulamiento estricto.
+capa de Modelos 
+Producto:Define los atributos básicos de cualquier artículo comercial del restaurante (código, nombre, categoría y precio). Aplica validaciones mediante propiedades para impedir campos vacíos o precios negativos.
 
-Repositorio GitHub
-├── restaurante_app/
-│   ├── modelos/
-│   │   ├── __init__.py
-│   │   ├── producto.py
-│   │   └── cliente.py
-│   ├── servicios/
-│   │   ├── __init__.py
-│   │   └── restaurante.py
-│   └── main.py
-└── README.md
-La clase Producto utiliza un constructor tradicional __init__ encargado de inicializar los atributos del objeto al momento de su creación dinámica. Recibe los parámetros obligatorios nombre, categoria, precio y un parámetro opcional parametrizado por defecto disponible = True.
-@property : Permite acceder a los atributos privados (como __precio, __nombre o __categoria) de forma pública y segura como si fueran variables normales, protegiendo el acceso directo al estado interno del objeto.
+Bebida: Extiende a la clase Producto, especializándose en los líquidos del menú al incorporar el atributo único de tamaño o presentación.
 
-@setter : Actúa como un filtro interceptor cuando se intenta modificar o asignar un valor a los atributos. Aquí se centralizan las validaciones del negocio; por ejemplo, si el precio asignado es menor a 0 o si las cadenas de texto se ingresan vacías, el setter bloquea la operación y lanza una excepción controlada.
+Cliente: Entidad independiente encargada de modelar la información de los usuarios (ID entero positivo, nombre y correo), aislando sus datos de las lógicas comerciales de los artículos.
+Capa de Servicios 
 
-La clase Cliente fue implementada utilizando el decorador @dataclass importado del módulo dataclasses de Python. Esta herramienta simplifica la creación de clases destinadas exclusivamente a almacenar datos.
+Restaurante: Centraliza la lógica operativa y de almacenamiento del negocio. Gestiona de manera unificada los arreglos de productos y clientes, encargándose de validar que no existan códigos ni identificaciones duplicadas antes de proceder a su inserción.
+Relación entre Producto y Bebida
+La relación entre ambas clases se fundamenta en el concepto de Herencia.La clase Bebida hereda directamente de Producto, lo que significa que una bebida es un producto dentro del dominio del restaurante. Esto permite reutilizar el constructor del padre con super().__init__() y los métodos existentes.
+Principios SOLID Aplicados
+Principio de Responsabilidad Única: Cada componente tiene una única razón para cambiar. Los modelos solo validan y representan datos, el servicio Restaurante manipula exclusivamente las colecciones del negocio, y main.py se limita a la captura de datos con input() y la visualización de la interfaz.
 
-El archivo main.py implementa una interfaz interactiva basada en un bucle cíclico que organiza las operaciones del restaurante en un menú numérico de siete opciones claras para el usuario. Las primeras tres opciones controlan la gestión de productos (registrar, listar y buscar por nombre), mientras que las opciones de la 4 a la 6 administran la base de clientes ( listado general y búsqueda mediante su número de identificación).
+Principio de Abierto/Cerrado (OCP): El sistema está abierto a la extensión pero cerrado a la modificación. Si en el futuro se requiere añadir un nuevo tipo de artículo (por ejemplo, PlatoFuerte), se puede crear una nueva subclase que herede de Producto sin alterar las colecciones ni el comportamiento lógico del servicio Restaurante.
 
-Reflexión:
-En el desarrollo de software real, los datos nunca se dejan fijos  de forma estática en el código fuente. La creación dinámica de objetos a partir de las entradas proporcionadas por el usuario por medio de input() dota a las aplicaciones de verdadera flexibilidad, interactividad y escalabilidad.
+Principio de Sustitución de Liskov (LSP): La subclase Bebida puede sustituir por completo a su clase base Producto en cualquier sección del programa sin alterar la integridad del sistema. Esto se evidencia al almacenar tanto productos como bebidas dentro del mismo arreglo unificado (self.productos) y procesarlos sin errores.
+
+El archivo main.py actúa como el punto de entrada del programa al implementar una interfaz interactiva en consola basada en un bucle continuo , coordinando las operaciones del restaurante mediante funciones específicas conectadas al servicio Restaurante. El sistema despliega un menú estructurado con seis opciones numéricas obligatorias: las opciones de la 1 a la 3 permiten recolectar los datos controlados para el alta de productos generales, bebidas y clientes respectivamente; las opciones 4 y 5 ejecutan el listado dinámico delegando de forma polimórfica la impresión visual mediante el método común mostrar_informacion()
+
+El diseño de software estructurado y mantenible es un pilar fundamental en la ingeniería de sistemas. Desarrollar soluciones basadas en la cohesión, el bajo acoplamiento y las buenas prácticas de la Programación Orientada a Objetos previene que el código se convierta en una estructura frágil ante el crecimiento del negocio.
+
+Al aislar las responsabilidades y proteger los datos a través del encapsulamiento, garantizamos que la detección de fallos sea inmediata y que los cambios en un módulo no desaten efectos secundarios inesperados en el resto del software.
